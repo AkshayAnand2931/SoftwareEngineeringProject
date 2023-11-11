@@ -1,22 +1,22 @@
 import React from 'react';
-import { BrowserRouter, Route, NavLink, Routes } from 'react-router-dom';
-import Login from './Login';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Billing from './Components/Billing';
+import Login from './Components/Login';
+import Inventory from './Components/Inventory';
+import Transaction from './Components/Transaction';
+import Navbar from './Components/Navbar';
 
 const App = () => {
   return (
     <BrowserRouter>
       <div>
-        <nav style ={{padding:'20px'}}>
-          <NavLink style={{margin:'10px'}} to="/">Login</NavLink>
-          <NavLink style={{margin:'10px'}} to="/bill">Billing</NavLink>
-          <NavLink style={{margin:'10px'}} to="/history">Transaction History</NavLink>
-          <NavLink style={{margin:'10px'}} to="/inventory">Inventory</NavLink>
-        </nav>
+      <Navbar />
 
       <Routes>
         <Route path="/" element={<Login/>} />
-        <Route path="/bill" element={<Billing/>} />
-        <Route path="/history" element={<Transactions/>} />
+        <Route path="/billing" element={<Billing/>} />
+        <Route path="/transaction" element={<Transaction/>} />
         <Route path="/inventory" element={<Inventory/>} />
       </Routes>
       </div>
@@ -25,16 +25,4 @@ const App = () => {
   );
 };
 
-
-const Billing = () => {
-  return <h1>Billing</h1>;
-};
-
-const Transactions = () => {
-  return <h1>Transactions</h1>;
-};
-
-const Inventory = () => {
-  return <h1>Inventory</h1>;
-};
 export default App;
