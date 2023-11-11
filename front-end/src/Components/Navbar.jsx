@@ -27,7 +27,7 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto item">
             <li className="nav-item">
-              <a
+              <button
                 className="nav-link"
                 style={{
                   color: "black",
@@ -37,10 +37,23 @@ const Navbar = () => {
                 onClick={()=>navigate('/')}
               >
                 Login
-              </a>
+              </button>
             </li>
             <li className="nav-item">
-              <a
+              <button
+                className="nav-link"
+                style={{
+                  color: "black",
+                  paddingRight: "30px",
+                  fontWeight: "600",
+                }}
+                onClick={()=>navigate('/register')}
+              >
+                Register
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
                 className="nav-link"
                 style={{
                   color: "black",
@@ -50,10 +63,10 @@ const Navbar = () => {
                 onClick={()=>navigate('/billing')}
               >
                 Billing
-              </a>
+              </button>
             </li>
             <li className="nav-item">
-              <a
+              <button
                 className="nav-link"
                 style={{
                   color: "black",
@@ -63,10 +76,10 @@ const Navbar = () => {
                 onClick={()=>navigate('/transaction')}
               >
                 Transaction
-              </a>
+              </button>
             </li>
             <li className="nav-item">
-              <a
+              <button
                 className="nav-link"
                 style={{
                   color: "black",
@@ -76,7 +89,7 @@ const Navbar = () => {
                 onClick={()=>navigate('/inventory')}
               >
                 Inventory
-              </a>
+              </button>
             </li>
           </ul>
         </div>

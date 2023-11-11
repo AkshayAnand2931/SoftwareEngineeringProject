@@ -6,6 +6,7 @@ import Login from './Components/Login';
 import Inventory from './Components/Inventory';
 import Transaction from './Components/Transaction';
 import Navbar from './Components/Navbar';
+import Register from './Components/Register';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<Login/>} />
+        <Route path="/register" element={<Register/>} />
         <Route path="/billing" element={<Billing/>} />
         <Route path="/transaction" element={<Transaction/>} />
         <Route path="/inventory" element={<Inventory/>} />
