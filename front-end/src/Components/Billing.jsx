@@ -1,32 +1,61 @@
-// BillingPage.js
+
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Table, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Table, Form, Button, Modal } from 'react-bootstrap';
+
+const PaymentModal = ({ show, handleClose, totalAmount, setItems }) => {
+
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Payment</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>Total Amount: ${totalAmount}</p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" onClick={() =>{
+          handleClose();
+          alert("Payment Successful");
+          setItems([]);
+        }}>
+          Confirm Payment
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
 
 const BillingPage = () => {
-  const [items, setItems] = useState([
-  ]);
+  const [items, setItems] = useState([]);
+  const [formData, setFormData] = useState({ name: '', price: '', quantity: 1 });
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [formData, setFormData] = useState({ name: '', price: '' });
+  const calculateTotalAmount = (items) => {
+    let total = 0;
+    items.forEach((item) => {
+      total += item.price * item.quantity;
+    });
+    return total;
+  };
 
   const addItemToBilling = () => {
     const newItem = {
       id: items.length + 1,
       name: formData.name,
-      price: parseFloat(formData.price),
+      price: parseFloat(formData.price === '' ? 0 : formData.price),
+      quantity: parseInt(formData.quantity, 10),
     };
-    setItems([...items, newItem]);
-    console.log(items);
-    setFormData({ name: '', price: '' });
+
+    setItems([ newItem, ...items]);
+    setFormData({ name: '', price: '', quantity: 1 });
   };
 
-  const removeItemFromBilling = (itemId) => {
-    const updatedItems = selectedItems.filter((item) => item.id !== itemId);
-    setSelectedItems(updatedItems);
+  const handleProceedToCheckout = () => {
+    setShowPaymentModal(true);
   };
 
-  const calculateTotalAmount = () => {
-    return selectedItems.reduce((total, item) => total + item.price, 0);
+  const handleClosePaymentModal = () => {
+    setShowPaymentModal(false);
   };
 
   const handleFormChange = (e) => {
@@ -39,10 +68,7 @@ const BillingPage = () => {
     addItemToBilling();
   };
 
-  const handleProceedToCheckout = () => {
-    // Implement the checkout logic here
-    console.log('Proceeding to checkout:', items);
-  };
+  const totalAmount = calculateTotalAmount(items);
 
   return (
     <Container className="mt-4">
@@ -74,12 +100,34 @@ const BillingPage = () => {
                     onChange={handleFormChange}
                   />
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Form.Group controlId="itemQuantity">
+                  <Form.Label>Quantity</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Enter item quantity"
+                    name="quantity"
+                    value={formData.quantity}
+                    onChange={handleFormChange}
+                  />
+                </Form.Group>
+                <Button 
+                  variant="primary" 
+                  type="submit"
+                  style={{ marginTop: '10px' }}
+                >
                   Add Item
                 </Button>
               </Form>
             </Card.Body>
           </Card>
+
+          <Button variant="success" 
+            onClick={handleProceedToCheckout}
+            disabled={items.length === 0}
+            style={{ marginTop: '20px' }}
+          >
+            Proceed to Checkout
+          </Button>
         </Col>
         <Col md={8}>
           <Card>
@@ -90,17 +138,17 @@ const BillingPage = () => {
               <Table striped bordered hover>
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Price</th>
+                    <th>Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
                   {items.map((item) => (
                     <tr key={item.id}>
-                      <td>{item.id}</td>
                       <td>{item.name}</td>
                       <td>${item.price}</td>
+                      <td>{item.quantity}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -109,13 +157,14 @@ const BillingPage = () => {
           </Card>
         </Col>
       </Row>
-      <Row className="mt-3">
-        <Col className="text-right">
-          <Button variant="success" onClick={handleProceedToCheckout}>
-            Proceed to Checkout
-          </Button>
-        </Col>
-      </Row>
+
+      
+      <PaymentModal
+        show={showPaymentModal}
+        handleClose={handleClosePaymentModal}
+        totalAmount={totalAmount}
+        setItems={setItems}
+      />
     </Container>
   );
 };
