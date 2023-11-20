@@ -1,22 +1,9 @@
 import React, { useEffect,useState } from 'react';
 import InventoryCard from './InventoryCard';
 import { Button,Form, Modal } from 'react-bootstrap';
+import axios from 'axios';
 
 const Inventory = () => {
-
-    const inventoryDataTest = [
-        {id: 1, name: "Product A", brand: "Brand X", quantity: 10},
-        {id: 2, name: "Product B", brand: "Brand Y",quantity: 20},
-        {id: 3, name: "Product B", brand: "Brand Y",quantity: 20},
-        {id: 4, name: "Product B", brand: "Brand Y",quantity: 20},
-        {id: 5, name: "Product B", brand: "Brand Y",quantity: 20},
-        {id: 6, name: "Product B", brand: "Brand Y",quantity: 20},
-        {id: 7, name: "Product B", brand: "Brand Y",quantity: 20},
-        {id: 8, name: "Product B", brand: "Brand Y",quantity: 20},
-        {id: 9, name: "Product B", brand: "Brand Y",quantity: 20},
-        {id: 10, name: "Product B", brand: "Brand Y",quantity: 20},
-        {id: 11, name: "Product B", brand: "Brand Y",quantity: 20}
-    ];
 
     const initialFormData = {
         id:'',
@@ -31,12 +18,12 @@ const Inventory = () => {
 
     useEffect(() =>{
         fetchInventoryData();
-    });
+    },[]);
 
     const fetchInventoryData = async () =>{
         try{
-            //const response = await axios.get('http://localhost:5000');
-            //setInventoryData(response);
+            const response = await axios.get('http://localhost:5000/Inventory');
+            setInventoryData(response.data);
             console.log("Got data");
         }
         catch(error){
@@ -50,7 +37,7 @@ const Inventory = () => {
 
     const handleAdd = async () => {
         try{
-            //await axios.post('http://localhost:5000',formData);
+            await axios.post('http://localhost:5000/Inventory',formData);
             fetchInventoryData();
             handleCloseModal();
         }
@@ -61,7 +48,9 @@ const Inventory = () => {
 
     const handleUpdate = async () => {
         try{
-            //await axios.put('http://localhost:5000',formData);
+            console.log(formData);
+            const response = await axios.put('http://localhost:5000/Inventory',formData);
+            console.log(response.data);
             fetchInventoryData();
             handleCloseModal();
         }
@@ -72,7 +61,7 @@ const Inventory = () => {
 
     const handleDelete = async (id) => {
         try{
-            //await axios.delete(`http://localhost:5000/${id}`);
+            await axios.delete(`http://localhost:5000/Inventory/${id}`);
             console.log(id);
         }
         catch(error){
@@ -95,7 +84,7 @@ const Inventory = () => {
         <div>
             <h1 style={{textAlign:'center',margin:'10px'}}>Inventory Details</h1>
             <div style={{display:"flex",flexWrap:"wrap"}}>
-                {inventoryDataTest.map(item => (
+                {inventoryData.map(item => (
                     <div key={item.id}>
                         <InventoryCard
                         id={item.id}

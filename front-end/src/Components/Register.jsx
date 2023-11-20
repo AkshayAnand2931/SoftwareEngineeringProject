@@ -1,8 +1,12 @@
 import React,{useState} from 'react';
 import { Container, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 
 const Register = () =>{
+
+    const navigate = useNavigate();
+    const [errorMessage,setErrorMessage] = useState("");
     const [formDetails,setFormDetails] = useState({
         EmployeeID:"",
         Name:"",
@@ -20,8 +24,15 @@ const Register = () =>{
         e.preventDefault();
 
         try{
-            //const response = await axios.post("http://localhost:5000",formDetails);
-            console.log(formDetails);
+            const result = await axios.post("http://localhost:5000/Register",formDetails);
+            const response = result.data;
+
+            if("Error" in response){
+                setErrorMessage(response.Error);
+            }
+            else{
+                navigate("/");
+            }
         }
         catch(error){
             console.error(error);
@@ -70,6 +81,10 @@ const Register = () =>{
                 <Button variant='primary' type='submit' className='btn-large mt-3'>
                     Register
                 </Button>
+
+                <p className="mt-3 text-danger" style={{ display: errorMessage ? "block" : "none" }}>
+                    {errorMessage}
+                </p>
             </Form>
         </Container>
     );
